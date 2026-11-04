@@ -11,31 +11,139 @@ function tabs(el,list,fn){el.innerHTML=list.map((t,i)=>'<button class="'+(i?'':'
  bs.forEach((b,i)=>b.onclick=()=>{bs.forEach(x=>x.classList.remove('on'));b.classList.add('on');mv(b);bx.classList.add('out');clearTimeout(bx._t);bx._t=setTimeout(()=>{fn(list[i]);bx.classList.remove('out')},220)});
  ind.style.transition='none';mv(bs[0]);requestAnimationFrame(()=>requestAnimationFrame(()=>ind.style.transition=''));
  const re=()=>mv(el.querySelector('.on'));addEventListener('resize',re);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(re);fn(list[0])}
-const DIV=[["Modeling", [["CO", "Kristoforus Rizkiano Tembang Langit", "250934721248"], ["Anggota", "Muhammad Firdhie Andalas", "250934717540"], ["Anggota", "M. Rangga Satria Noorfando", "250934702662"], ["Anggota", "Rakha Aribawa Rahman", "230934606756"], ["Anggota", "Lutfi Ahmad Suriyana", "250934701541"]]], ["Mat Model", [["CO", "Muhammad Alfian Firmansyah", "250934724477"], ["Anggota", "Muhammad Iqbal Maulana", "250934730396"], ["Anggota", "Khalidatul Aliyah Safitri", "250934726013"], ["Anggota", "Muhamad Ferly Farnando", "250934702060"]]], ["Software", [["CO", "Fattar Davino Aulia Rahman", "250934722594"], ["Anggota", "Muhamad Supriyadi", "250934726299"], ["Anggota", "Muhammad Aryaputra Manda", "250934701411"], ["Anggota", "M. Nauval Al-Ghafary Wardoyo", "250934723431"], ["Anggota", "Haudh Al Maa'uun", "250934721118"]]], ["Electrical", [["CO", "Muhammad Nur Faizin", "250934703028"], ["Anggota", "Muhammad Farrel Caesar", "250934702395"], ["Anggota", "Mokhamad Rayhan Faturahman", "250934726358"], ["Anggota", "Dava Maulana Yudha", "230531601107"], ["Anggota", "Iltizamul Haqqi", "230934606469"], ["Anggota", "Mexcelino Perwira Dirganesia", "250934722234"], ["Anggota", "Mochammad Ardiansyah Tri Wicaksono", "250934700849"]]], ["Mekanikal", [["CO", "M. Salman Alfarizi Ramadani", "250934722594"], ["Anggota", "Mukhamad Nur Alfan", "230934605477"], ["Anggota", "Mohammad Miftah Yusron Hana'i", "250934726021"], ["Anggota", "Febrian Patria Yoni", "250934720252"], ["Anggota", "Muhammad Fadil", "250934730333"], ["Anggota", "Mohamad Rizky Fadilah", "250934720260"], ["Anggota", "Mohammad Hisyam Rifai", "250934730343"]]], ["Perlengkapan", [["CO", "Handhika Hidayatullah", "250934700440"], ["Anggota", "Loudy Firza Aulia", "250934723692"], ["Anggota", "Keihan Daafa Parsya", "250934722195"], ["Anggota", "Girendra Hangestubrata", "250934721009"], ["Anggota", "Jalalludin Satriya Nayaka", "250934703508"]]], ["PDD", [["Anggota", "Legison Satria Manik Allo", "250934730083"], ["Anggota", "Maritza Aprilia Putri", "250934725052"], ["CO", "Mohammad Miftah Yusron Hana'i", "250934726021"]]]];
-const PENG=[["Ketua Tim", "Mochammad Ardiansyah Tri Wicaksono", "250934700849"], ["Sekretaris Tim 1", "Mohammad Miftah Yusron Hana'i", "250934726021"], ["Sekretaris Tim 2", "Mohamad Supriyadi", "250934726299"], ["Bendahara Tim 1", "Khalidatul Aliyah Safitri", "250934726013"], ["Bendahara Tim 2", "Loudy Firza Aulia", "250934723692"], ["Bendahara Tim 3", "Maritza Aprilia Putri", "250934725052"]];
-const ap={};
-DIV.forEach(([d,m])=>m.forEach(([p,n,i])=>{(ap[i]=ap[i]||[]).push({d:d,n:n,p:p})}));
-PENG.forEach(([r,n,i])=>{(ap[i]=ap[i]||[]).push({r:r,n:n})});
-const lab=x=>(x.p==='CO'?'CO ':'Anggota ')+x.d;
-const ini=n=>n.replace(/[^A-Za-z ]/g,'').split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
-const mk=(n,i,main,alts,k)=>'<div class="card" style="animation-delay:'+k*70+'ms"><div class="av">'+ini(n)+'</div><div><b>'+n+'</b><small>'+i+'</small><span class="role">'+main+'</span>'+alts.map(x=>'<span class="role alt">'+x+'</span>').join('')+'</div></div>';
-const orgFn=t=>{
- let h;
- if(t==='Pengurus'){
-  h='<p class="tl">Struktur Tim Proyek Mekanika Fluida<small>'+PENG.length+' orang</small></p>'+PENG.map(([r,n,i],k)=>mk(n,i,r,(ap[i]||[]).filter(x=>x.d).map(lab),k)).join('');
- }else{
-  const d=DIV.find(x=>x[0]===t);
-  h='<p class="tl">Divisi '+t+'<small>'+d[1].length+' orang</small></p>'+d[1].map(([p,n,i],k)=>mk(n,i,p,(ap[i]||[]).filter(x=>x.r||(x.n===n&&x.d!==t)).map(x=>x.r||lab(x)),k)).join('');
+const TEAM_LEADERS=[
+ {division:'Modeling',folder:'modeling',leader:'Kristoforus Rizkiano Tembang Langit',description:'Draf singkat: pemodelan bentuk dan perilaku aliran air untuk membantu mengevaluasi rancangan turbin vortex.',members:['Muhammad Firdhie Andalas','M. Rangga Satria Noorfando','Rakha Aribawa Rahman','Lutfi Ahmad Suriyana']},
+ {division:'Mat Model',folder:'mat-model',leader:'Muhammad Alfian Firmansyah',description:'Draf singkat: kajian material dan model komponen yang digunakan pada proyek Vortex Hydro.',members:['Muhammad Iqbal Maulana','Khalidatul Aliyah Safitri','Muhamad Ferly Farnando']},
+ {division:'Software',folder:'software',leader:'Fattar Davino Aulia Rahman',description:'Draf singkat: pengembangan dan pengelolaan kebutuhan perangkat lunak untuk mendukung proyek Vortex Hydro.',members:['Muhamad Supriyadi','Muhammad Aryaputra Manda','M. Nauval Al-Ghafary Wardoyo',"Haudh Al Maa'uun"]},
+ {division:'Electrical',folder:'electrical',leader:'Muhammad Nur Faizin',description:'Draf singkat: dukungan sistem dan komponen kelistrikan untuk kebutuhan proyek Vortex Hydro.',members:['Muhammad Farrel Caesar','Mokhamad Rayhan Faturahman','Dava Maulana Yudha','Iltizamul Haqqi','Mexcelino Perwira Dirganesia','Mochammad Ardiansyah Tri Wicaksono']},
+ {division:'Mekanikal',folder:'mekanikal',leader:'M. Salman Alfarizi Ramadani',description:'Draf singkat: rancangan mekanis dan komponen turbin vortex dalam proyek Vortex Hydro.',members:['Mukhamad Nur Alfan',"Mohammad Miftah Yusron Hana'i",'Febrian Patria Yoni','Muhammad Fadil','Mohamad Rizky Fadilah','Mohammad Hisyam Rifai']},
+ {division:'Perlengkapan',folder:'perlengkapan',leader:'Handhika Hidayatullah',description:'Draf singkat: kebutuhan perlengkapan untuk mendukung kegiatan dan pengerjaan proyek Vortex Hydro.',members:['Loudy Firza Aulia','Keihan Daafa Parsya','Girendra Hangestubrata','Jalalludin Satriya Nayaka']},
+ {division:'PDD',folder:'pdd',leader:"Mohammad Miftah Yusron Hana'i",description:'Draf singkat: dukungan publikasi dan dokumentasi kegiatan proyek Vortex Hydro.',members:['Legison Satria Manik Allo','Maritza Aprilia Putri']}
+];
+const TEAM_MANAGEMENT=[
+ {position:'Ketua Tim',name:'Mochammad Ardiansyah Tri Wicaksono'},
+ {position:'Sekretaris Tim 1',name:"Mohammad Miftah Yusron Hana'i"},
+ {position:'Sekretaris Tim 2',name:'Mohamad Supriyadi'},
+ {position:'Bendahara Tim 1',name:'Khalidatul Aliyah Safitri'},
+ {position:'Bendahara Tim 2',name:'Loudy Firza Aulia'},
+ {position:'Bendahara Tim 3',name:'Maritza Aprilia Putri'}
+];
+const TEAM_PHOTO_FORMATS={};
+const teamPhotoSlug=name=>name.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const teamPhotoPath=(name,folder)=>'gambar_anggota/'+folder+'/'+teamPhotoSlug(name);
+const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const teamPhoto=(name,folder,variant='member')=>{
+ const path=teamPhotoPath(name,folder),format=TEAM_PHOTO_FORMATS[folder+'/'+teamPhotoSlug(name)];
+ const hasPhoto=format==='jpg'||format==='png';
+ const isLeader=variant!=='member';
+ const image=hasPhoto?path+'.'+format:'gambar_anggota/'+(isLeader?'placeholder-card.svg':'placeholder-avatar.svg');
+ const imageClass=variant==='leader'||variant==='management'?'team-card__image':variant==='leader-detail'||variant==='management-detail'?'team-detail__leader-photo':'team-member__photo';
+ const label=variant.startsWith('management')?'Foto pengurus: ':isLeader?'Foto ketua divisi: ':'Foto anggota: ';
+ return '<img class="'+imageClass+'" src="'+image+'" alt="'+label+escapeHtml(name)+'" decoding="async"'+(hasPhoto?' data-team-photo':'')+'>'
+};
+document.addEventListener('error',event=>{
+ const image=event.target;
+ if(!image.matches('.team-card__image,.team-detail__leader-photo,.team-member__photo')||!image.hasAttribute('data-team-photo'))return;
+ image.removeAttribute('data-team-photo');
+ image.src='gambar_anggota/'+(image.classList.contains('team-member__photo')?'placeholder-avatar.svg':'placeholder-card.svg')
+},true);
+const teamDeck=$('#tm');
+teamDeck.innerHTML='<button class="team-card" type="button" data-management-index="0" aria-haspopup="dialog" aria-label="Lihat Ketua Tim: '+escapeHtml(TEAM_MANAGEMENT[0].name)+'"><span class="team-card__visual">'+teamPhoto(TEAM_MANAGEMENT[0].name,'pengurus','management')+'</span></button>'+TEAM_LEADERS.map((team,index)=>'<button class="team-card" type="button" data-team-index="'+index+'" aria-haspopup="dialog" aria-label="Lihat deskripsi dan anggota Divisi '+escapeHtml(team.division)+'"><span class="team-card__visual">'+teamPhoto(team.leader,team.folder,'leader')+'</span></button>').join('');
+const teamDetail=$('#teamDetail'),teamDetailContent=$('#teamDetailContent');
+let teamDetailOpener=null,teamCloseTimer;
+function showTeamDetail(content,opener){
+ clearTimeout(teamCloseTimer);
+ teamDetailContent.innerHTML=content;
+ teamDetailOpener=opener;
+ teamDetail.hidden=false;
+ teamDetail.setAttribute('aria-hidden','false');
+ document.body.classList.add('team-detail-open');
+ teamDetail.offsetHeight;
+ teamDetail.classList.add('is-open');
+ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  opener.animate([{transform:'scale(1)'},{transform:'scale(.95)'},{transform:'scale(1.025)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.2,.8,.2,1)'});
+  teamDetail.animate([{opacity:0},{opacity:1}],{duration:260,easing:'ease-out'});
+  teamDetail.querySelector('.team-detail__panel').animate([{opacity:0,transform:'translateY(30px) scale(.94)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:420,easing:'cubic-bezier(.16,1,.3,1)'});
  }
- $('#tm').innerHTML=h};
-const ORG=['Pengurus'].concat(DIV.map(d=>d[0])),tb=$('#tb');
-const cnt=t=>t==='Pengurus'?PENG.length:DIV.find(x=>x[0]===t)[1].length;
-tb.innerHTML=ORG.map((t,i)=>'<button role="tab" class="'+(i?'':'on')+'" data-t="'+t+'"><span>'+t+'</span><em>'+cnt(t)+'</em></button>').join('');
-$('#ddm').innerHTML=ORG.map(t=>'<a href="#divisi" data-d="'+t+'">'+t+'</a>').join('');
-function pick(t){[...tb.children].forEach(b=>b.classList.toggle('on',b.dataset.t===t));const b=tb.querySelector('.on');if(innerWidth<=820)tb.scrollTo({left:b.offsetLeft-22,behavior:'smooth'});const bx=$('#tm');bx.classList.add('out');clearTimeout(bx._t);bx._t=setTimeout(()=>{orgFn(t);bx.classList.remove('out')},180)}
-tb.onclick=e=>{const b=e.target.closest('button');if(b)pick(b.dataset.t)};
-document.querySelectorAll('[data-d]').forEach(a=>a.addEventListener('click',()=>pick(a.dataset.d)));
-orgFn('Pengurus');
+ teamDetail.querySelector('[data-team-close]').focus()
+}
+function closeTeamDetail(){
+ if(!teamDetail.classList.contains('is-open'))return;
+ teamDetail.classList.remove('is-open');
+ teamDetail.setAttribute('aria-hidden','true');
+ document.body.classList.remove('team-detail-open');
+ clearTimeout(teamCloseTimer);
+ teamCloseTimer=setTimeout(()=>{teamDetail.hidden=true},220);
+ if(teamDetailOpener)teamDetailOpener.focus();
+ teamDetailOpener=null
+}
+function openTeamDetail(index,opener){
+ const team=TEAM_LEADERS[index];
+ if(!team)return;
+ const content='<header class="team-detail__header"><p class="team-detail__eyebrow">Struktur tim · Divisi</p><h2 id="teamDetailTitle">'+escapeHtml(team.division)+'</h2><p class="team-detail__note">Deskripsi singkat ini merupakan draf awal, bukan uraian tugas resmi.</p></header><section class="team-detail__leader">'+teamPhoto(team.leader,team.folder,'leader-detail')+'<div><span class="team-detail__role">CO / Ketua Divisi</span><h3>'+escapeHtml(team.leader)+'</h3></div></section><section class="team-detail__description"><h3>Deskripsi singkat</h3><p>'+escapeHtml(team.description)+'</p></section><section class="team-detail__members" aria-labelledby="teamMembersHeading"><div class="team-detail__members-heading"><h3 id="teamMembersHeading">Anggota divisi</h3><span>'+team.members.length+' anggota</span></div><ul class="team-member-list">'+team.members.map((name,index)=>'<li class="team-member" style="--member-index:'+index+'">'+teamPhoto(name,team.folder)+'<span>'+escapeHtml(name)+'</span></li>').join('')+'</ul></section>';
+ showTeamDetail(content,opener)
+}
+{
+ const deck=teamDeck;
+ let drag=null,suppressClick=false;
+ deck.addEventListener('mousedown',event=>{
+  if(event.button!==0)return;
+  drag={startX:event.clientX,startScroll:deck.scrollLeft,moved:false};
+ });
+ window.addEventListener('mousemove',event=>{
+  if(!drag)return;
+  const delta=event.clientX-drag.startX;
+  if(!drag.moved&&Math.abs(delta)<6)return;
+  drag.moved=true;
+  deck.classList.add('is-dragging');
+  deck.scrollLeft=drag.startScroll-delta;
+  event.preventDefault()
+ });
+ const endDrag=()=>{
+  if(!drag)return;
+  if(drag.moved){
+   const card=deck.querySelector('.team-card');
+   const gap=parseFloat(getComputedStyle(deck).columnGap)||0;
+   const step=card.getBoundingClientRect().width+gap;
+   const target=Math.min(deck.scrollWidth-deck.clientWidth,Math.max(0,Math.round(deck.scrollLeft/step)*step));
+   deck.classList.add('is-snapping');
+   deck.scrollTo({left:target,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+   setTimeout(()=>deck.classList.remove('is-snapping'),420);
+   suppressClick=true;
+   setTimeout(()=>{suppressClick=false},0)
+  }
+  drag=null;
+  deck.classList.remove('is-dragging')
+ };
+ window.addEventListener('mouseup',endDrag);
+ deck.addEventListener('click',event=>{
+  if(suppressClick){event.preventDefault();event.stopImmediatePropagation();suppressClick=false;return}
+  const managementCard=event.target.closest('[data-management-index]');
+  if(managementCard){
+   const person=TEAM_MANAGEMENT[Number(managementCard.dataset.managementIndex)];
+   if(!person)return;
+   const members=TEAM_MANAGEMENT.slice(1);
+   const content='<header class="team-detail__header"><p class="team-detail__eyebrow">Struktur tim · Pengurus utama</p><h2 id="teamDetailTitle">'+escapeHtml(person.position)+'</h2></header><section class="team-detail__leader">'+teamPhoto(person.name,'pengurus','management-detail')+'<div><span class="team-detail__role">'+escapeHtml(person.position)+'</span><h3>'+escapeHtml(person.name)+'</h3></div></section><section class="team-detail__members" aria-labelledby="teamMembersHeading"><div class="team-detail__members-heading"><h3 id="teamMembersHeading">Sekretaris &amp; bendahara</h3><span>'+members.length+' pengurus</span></div><ul class="team-member-list">'+members.map((member,index)=>'<li class="team-member" style="--member-index:'+index+'">'+teamPhoto(member.name,'pengurus')+'<span class="team-member__info"><strong>'+escapeHtml(member.name)+'</strong><span>'+escapeHtml(member.position)+'</span></span></li>').join('')+'</ul></section>';
+   showTeamDetail(content,managementCard);
+   return
+  }
+  const leaderCard=event.target.closest('[data-team-index]');
+  if(leaderCard)openTeamDetail(Number(leaderCard.dataset.teamIndex),leaderCard)
+});
+}
+teamDetail.addEventListener('click',event=>{
+ if(event.target===teamDetail||event.target.closest('[data-team-close]'))closeTeamDetail()
+});
+document.addEventListener('keydown',event=>{
+ if(!teamDetail.classList.contains('is-open'))return;
+ if(event.key==='Escape'){closeTeamDetail();return}
+ if(event.key!=='Tab')return;
+ const focusable=[...teamDetail.querySelectorAll('button:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])')];
+ if(!focusable.length)return;
+ const first=focusable[0],last=focusable[focusable.length-1];
+ if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+ else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+});
 const col={'3D CAD':'linear-gradient(135deg,#377A98,#140951)','Simulasi CFD':'radial-gradient(circle at 40% 50%,#FF4D5A,#FFB84D 24%,#22C7A9 55%,#140951)','Foto asli':'linear-gradient(160deg,#5FD39A,#0A3B3A)'};
 const items=[['3D CAD','Runner turbin, sudut isometrik'],['Simulasi CFD','Kontur kecepatan air di dalam bak'],['Foto asli','Alat saat uji coba'],['3D CAD','Tampak atas bak pusaran'],['Simulasi CFD','Streamline aliran masuk'],['Foto asli','Proses perakitan']];
 let cur=[],ix=0;
@@ -51,8 +159,6 @@ const close=()=>$('#lb').classList.remove('open');
 $('#cl').onclick=close;$('#pv').onclick=()=>show(ix-1,lst);$('#nx').onclick=()=>show(ix+1,lst);
 $('#lb').onclick=e=>{if(e.target.id==='lb')close()};
 document.onkeydown=e=>{if(!$('#lb').classList.contains('open'))return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(ix-1,lst);if(e.key==='ArrowRight')show(ix+1,lst)};
-const SRC=[...document.querySelectorAll('.srcb')].map(b=>{const m=b.querySelector('img');return{img:m.src,alt:m.alt,cap:b.dataset.cap}});
-document.querySelectorAll('.srcb').forEach((b,k)=>b.onclick=()=>show(k,SRC));
 document.documentElement.classList.add('js');
 let sc=0;const rvs=[...document.querySelectorAll('h2,.lead,.step,.tabs,#tj,.ctlbar,footer .cols')];
 rvs.forEach(e=>{e.classList.add('rv');if(e.classList.contains('step'))e.style.transitionDelay=(sc++)*120+'ms'});
@@ -62,8 +168,6 @@ const lk=[...document.querySelectorAll('.links>a,.dd>a')];
 const so=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting)lk.forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+x.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
 ['top','tentang','divisi','dokumentasi'].forEach(id=>so.observe(document.getElementById(id)));
 
-$('#tm').addEventListener('pointermove',e=>{const c=e.target.closest('.card');if(!c)return;const r=c.getBoundingClientRect();c.style.transform='perspective(600px) rotateX('+(-(e.clientY-r.top-r.height/2)/r.height*8)+'deg) rotateY('+((e.clientX-r.left-r.width/2)/r.width*8)+'deg)'});
-$('#tm').addEventListener('pointerout',e=>{const c=e.target.closest('.card');if(c)c.style.transform=''});
 const still=()=>matchMedia('(prefers-reduced-motion:reduce)').matches&&!document.documentElement.classList.contains('fm');
 const wp=document.createElement('div');wp.style.cssText='position:fixed;left:0;right:0;top:0;height:calc(100% + 160px);transform:translateY(100%);z-index:90;pointer-events:none;display:flex;flex-direction:column';
 const wv1='<svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="display:block;width:100%;height:80px"><path d="M0 40C150 0 300 0 450 40s300 40 450 0 200-20 300 0V80H0z" fill="#244A80"/></svg>';

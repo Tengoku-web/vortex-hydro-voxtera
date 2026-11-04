@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-labelledby="title description">
+  <title id="title">Placeholder foto ketua divisi</title>
+  <desc id="description">Ilustrasi avatar sederhana untuk foto ketua divisi yang belum tersedia.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D6E8F1"/>
+      <stop offset="1" stop-color="#7FB9D1"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="480" fill="url(#background)"/>
+  <circle cx="320" cy="174" r="82" fill="#244A80" opacity=".8"/>
+  <path d="M151 480c13-107 76-166 169-166s156 59 169 166" fill="#140951" opacity=".86"/>
+  <path d="M275 178c18 15 72 15 90 0" fill="none" stroke="#D6E8F1" stroke-linecap="round" stroke-width="8" opacity=".75"/>
+</svg>
