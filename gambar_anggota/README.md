@@ -1,6 +1,8 @@
 # Panduan foto kartu struktur tim Vortex Hydro
 
-Bagian Struktur Tim menggunakan satu dek horizontal dengan delapan kartu: kartu pertama adalah Ketua Tim, diikuti tujuh ketua divisi (CO). Geser dek dengan drag mouse di desktop atau swipe di layar sentuh. Tekan kartu Ketua Tim untuk melihat foto, sekretaris, dan bendahara. Tekan kartu CO untuk melihat deskripsi singkat draf, foto ketua, serta foto dan nama anggota divisi. Kartu hanya menampilkan gambar; teks alternatif dan label tombol tetap mendukung pembaca layar.
+Bagian Struktur Tim berupa carousel coverflow 3D dengan delapan kartu: kartu pertama adalah Ketua Tim, diikuti tujuh ketua divisi (CO). Kartu di tengah tampil berwarna dan besar, kartu di sampingnya abu-abu dan miring berperspektif. Geser dengan drag mouse atau swipe, pakai tombol panah, klik batang progres, scroll horizontal di trackpad, atau tombol panah keyboard (Home/End juga bisa). Klik kartu di samping untuk memindahkannya ke tengah. Klik kartu di tengah untuk memutarnya (flip): sisi belakang menampilkan deskripsi singkat divisi dan daftar foto serta nama anggota (untuk Ketua Tim: sekretaris dan bendahara). Tombol putar balik di pojok kanan atas, tombol Esc, atau menggeser kartu akan mengembalikan kartu ke foto. Teks alternatif dan label tombol tetap mendukung pembaca layar, dan animasi dipersingkat untuk pengguna yang memilih "reduce motion".
+
+Warna aksen tiap kartu (garis kecil di samping jabatan, batang progres, dan strip atas sisi belakang) diatur di objek `TEAM_ACCENT` pada `script.js`, kuncinya sama dengan nama folder divisi.
 
 Deskripsi divisi saat ini adalah draf awal, bukan uraian tugas resmi.
 
@@ -64,7 +66,7 @@ const TEAM_PHOTO_FORMATS = {
 };
 ```
 
-Helper gambar akan memilih foto berdasarkan divisi dan nama orang. Jika foto tidak tersedia, anggota menggunakan `placeholder-avatar.svg`; jika foto yang didaftarkan gagal dimuat, gambar kembali ke placeholder yang sesuai. Data Ketua Tim, sekretaris, dan bendahara dikelola di `TEAM_MANAGEMENT`; Ketua Tim adalah satu-satunya pengurus yang menjadi kartu di dek utama, sedangkan pengurus lainnya ditampilkan sebagai anggota pada detailnya. Deskripsi singkat divisi dan daftar anggota dikelola di `TEAM_LEADERS` dalam `script.js`. Saat memperbarui data, pertahankan nama sumber roster, perbarui dokumentasi ini, dan jangan tampilkan NIM.
+Helper gambar akan memilih foto berdasarkan divisi dan nama orang. Jika foto tidak tersedia, anggota menggunakan `placeholder-avatar.svg`; jika foto yang didaftarkan gagal dimuat, gambar kembali ke placeholder yang sesuai. Jika placeholder-nya pun hilang, CSS menampilkan siluet bawaan sehingga kartu tidak pernah kosong atau menampilkan ikon gambar rusak. Data Ketua Tim, sekretaris, dan bendahara dikelola di `TEAM_MANAGEMENT`; Ketua Tim adalah satu-satunya pengurus yang menjadi kartu di dek utama, sedangkan pengurus lainnya ditampilkan sebagai anggota pada detailnya. Deskripsi singkat divisi dan daftar anggota dikelola di `TEAM_LEADERS` dalam `script.js`. Saat memperbarui data, pertahankan nama sumber roster, perbarui dokumentasi ini, dan jangan tampilkan NIM.
 
 ## Struktur folder lainnya
 

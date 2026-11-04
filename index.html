@@ -42,14 +42,15 @@
 <section class="sky" id="divisi"><div class="wrap">
   <h2>Struktur tim</h2>
   <h3 class="team-deck-title">Pengurus utama &amp; ketua divisi</h3>
-  <div class="team-deck" id="tb">
-    <div class="team-leader-grid" id="tm" role="group" aria-label="Foto ketua tim dan tujuh ketua divisi; geser ke samping untuk melihat semua foto" tabindex="0"></div>
-  </div>
-  <div class="team-detail" id="teamDetail" aria-hidden="true" hidden>
-    <section class="team-detail__panel" role="dialog" aria-modal="true" aria-labelledby="teamDetailTitle">
-      <button class="team-detail__close" type="button" data-team-close aria-label="Tutup detail struktur tim">Tutup</button>
-      <div id="teamDetailContent"></div>
-    </section>
+  <div class="tcf" id="tb">
+    <div class="tcf__stage" id="tm" role="group" aria-roledescription="carousel" aria-label="Ketua tim dan ketua divisi. Ketuk kartu di tengah untuk melihat anggota."></div>
+    <div class="tcf__bar">
+      <button class="tcf__arrow" id="tcPrev" type="button" aria-label="Kartu sebelumnya"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="tcf__ticks" id="tcTicks"></div>
+      <button class="tcf__arrow" id="tcNext" type="button" aria-label="Kartu berikutnya"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+    <p class="tcf__meta"><b id="tcCount">01 / 08</b>Geser atau ketuk kartu di tengah untuk melihat anggota</p>
+    <p class="tcf__live" id="tcLive" aria-live="polite"></p>
   </div>
 </div></section>
 <div class="wv wv--sky"><svg class="wave wave--section" viewBox="0 0 1200 46" preserveAspectRatio="none"><path fill="#F3F7FA" d="M0 24C100 4 200 4 300 24s200 20 300 0 200-20 300 0 200 20 300 0V46H0z"/></svg></div>
