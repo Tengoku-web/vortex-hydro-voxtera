@@ -4,8 +4,22 @@ const bg=$('#bg');
 const setMenuOpen=open=>{$('#ln').classList.toggle('open',open);bg.classList.toggle('x',open);bg.setAttribute('aria-expanded',String(open));bg.setAttribute('aria-label',open?'Tutup menu':'Buka menu')};
 bg.onclick=()=>setMenuOpen(!$('#ln').classList.contains('open'));
 $('#ln').onclick=e=>{if(e.target.closest('a'))setMenuOpen(false)};
-const tags=['ANSYS Fluent','AutoCAD','MATLAB','Figma','VS Code'];
-{const l=tags.map(t=>'<span class="sw">'+t+'</span>').join('');$('#t1').innerHTML=l+l+l+l+l+l}
+const tools=[
+ {name:'ANSYS Fluent',image:'Image_Icon/Ansys.png'},
+ {name:'AutoCAD',image:'Image_Icon/Autocad.png'},
+ {name:'MATLAB',image:'Image_Icon/MathLab.png'},
+ {name:'VS Code',image:'Image_Icon/Vscode.png'}
+];
+const toolTrack=$('#t1');
+const toolSlides=tools.map(({name,image},i)=>'<span class="sw'+(i?'':' is-active')+'" aria-hidden="'+(i?'true':'false')+'"><img src="'+image+'" alt=""><span class="sw-label">'+name+'</span></span>').join('');
+toolTrack.innerHTML=toolSlides;
+const toolCards=[...toolTrack.querySelectorAll('.sw')];
+let activeTool=0,toolRotation;
+const showTool=i=>{toolCards.forEach((card,index)=>{const active=index===i;card.classList.toggle('is-active',active);card.setAttribute('aria-hidden',String(!active))});activeTool=i};
+const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
+const updateToolRotation=()=>{clearInterval(toolRotation);if(!motionPreference.matches)toolRotation=setInterval(()=>showTool((activeTool+1)%toolCards.length),6000)};
+updateToolRotation();
+motionPreference.addEventListener('change',updateToolRotation);
 function tabs(el,list,fn){el.innerHTML=list.map((t,i)=>'<button class="'+(i?'':'on')+'">'+t+'</button>').join('')+'<i class="ind"></i>';
  const bs=[...el.querySelectorAll('button')],ind=el.querySelector('.ind'),bx=el.nextElementSibling;
  const mv=b=>{ind.style.width=b.offsetWidth+'px';ind.style.height=b.offsetHeight+'px';ind.style.transform='translate('+b.offsetLeft+'px,'+b.offsetTop+'px)'};
@@ -29,7 +43,11 @@ const TEAM_MANAGEMENT=[
  {position:'Bendahara Tim 2',name:'Loudy Firza Aulia'},
  {position:'Bendahara Tim 3',name:'Maritza Aprilia Putri'}
 ];
-const TEAM_PHOTO_FORMATS={'electrical/muhammad-nur-faizin':'jpg'};
+const TEAM_PHOTO_FORMATS={
+ 'electrical/muhammad-nur-faizin':'jpg',
+ 'electrical/muhammad-farrel-caesar':'jpg',
+ 'electrical/mokhamad-rayhan-faturahman':'jpg'
+};
 const teamPhotoSlug=name=>name.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const teamPhotoPath=(name,folder)=>'gambar_anggota/'+folder+'/'+teamPhotoSlug(name);
 const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -280,15 +298,6 @@ addEventListener('scroll',()=>{const y=scrollY;nv.classList.toggle('sc',y>20);if
 document.querySelectorAll('[data-n]').forEach(el=>{const n=+el.dataset.n;setTimeout(()=>{const t0=performance.now();(function f(t){const p=Math.min((t-t0)/1500,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)},1000)});
 $('.hero').addEventListener('pointerdown',e=>{if(e.target.closest('a'))return;const r=e.currentTarget.getBoundingClientRect(),d=document.createElement('i');d.className='rip';d.style.left=e.clientX-r.left+'px';d.style.top=e.clientY-r.top+'px';e.currentTarget.appendChild(d);setTimeout(()=>d.remove(),950)});
 const sp=$('#sp');document.addEventListener('mousemove',e=>{sp.style.transform='translate('+(e.clientX+10)+'px,'+(e.clientY+10)+'px)'});
-
-const ABT=['Prinsip kerja turbin vortex','Mengapa menggunakan mikrohidro','Cara kerjanya'],abN=$('#abNav'),abP=$('#abPanel');
-abN.innerHTML=ABT.map((t,i)=>'<button role="tab" class="'+(i?'':'on')+'" data-i="'+i+'"><span>'+t+'</span><em>0'+(i+1)+'</em></button>').join('');
-$('#ddm0').innerHTML=ABT.map((t,i)=>'<a href="#tentang" data-a="'+i+'">'+t+'</a>').join('');
-const abFn=i=>{abP.innerHTML='<p class="tl"><small>0'+(i+1)+' / 03</small>'+ABT[i]+'</p><div class="empty">Konten menyusul</div>'};
-function pickA(i){[...abN.children].forEach((b,k)=>b.classList.toggle('on',k===i));if(innerWidth<=820)abN.scrollTo({left:abN.children[i].offsetLeft-22,behavior:'smooth'});abP.classList.add('out');clearTimeout(abP._t);abP._t=setTimeout(()=>{abFn(i);abP.classList.remove('out')},180)}
-abN.onclick=e=>{const b=e.target.closest('button');if(b)pickA(+b.dataset.i)};
-document.querySelectorAll('[data-a]').forEach(a=>a.addEventListener('click',()=>pickA(+a.dataset.a)));
-abFn(0);
 
 (function(){const cv=$('#flow');if(!cv)return;const ctx=cv.getContext('2d'),hero=cv.parentElement;
 let W,H,dx,cols,rows,AC=[],mx=-1e4,my=-1e4,run=true,raf=0;const dy=26,t0=performance.now(),reducedMotion=matchMedia('(prefers-reduced-motion:reduce)'),motionReduced=()=>reducedMotion.matches&&!document.documentElement.classList.contains('fm');

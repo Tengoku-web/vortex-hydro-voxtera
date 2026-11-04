@@ -62,7 +62,9 @@ const TEAM_PHOTO_FORMATS = {
   'pengurus/mochammad-ardiansyah-tri-wicaksono': 'jpg',
   'software/fattar-davino-aulia-rahman': 'jpg',
   'modeling/kristoforus-rizkiano-tembang-langit': 'png',
-  'electrical/muhammad-farrel-caesar': 'jpg'
+  'electrical/muhammad-nur-faizin': 'jpg',
+  'electrical/muhammad-farrel-caesar': 'jpg',
+  'electrical/mokhamad-rayhan-faturahman': 'jpg'
 };
 ```
 

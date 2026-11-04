@@ -16,7 +16,7 @@
 <div class="prog" id="pg"></div>
 <nav><div class="wrap">
   <a class="brand" href="#top" aria-label="Vortex Hydro, ke beranda"><span class="logo" aria-hidden="true"></span>Vortex Hydro</a>
-  <div class="links" id="ln"><a class="mo" href="#top">Beranda</a><div class="dd"><a href="#tentang">Tentang Project</a><div class="ddm one" id="ddm0"></div></div><a href="#divisi">Struktur</a><a href="#dokumentasi">Dokumentasi</a><a class="navcta" href="#kontak">Hubungi kami</a></div>
+  <div class="links" id="ln"><a class="mo" href="#top">Beranda</a><div class="dd"><a href="#tentang">Tentang Project</a><div class="ddm one"><a href="#prinsip-kerja">Prinsip kerja turbin vortex</a><a href="#mengapa-mikrohidro">Mengapa menggunakan mikrohidro</a><a href="#cara-kerja">Cara kerjanya</a></div></div><a href="#divisi">Struktur</a><a href="#dokumentasi">Dokumentasi</a><a class="navcta" href="#kontak">Hubungi kami</a></div>
   <button class="burger" id="bg" aria-label="Buka menu" aria-expanded="false"><i></i><i></i><i></i></button>
 </div></nav>
 
@@ -30,12 +30,37 @@
   </div></div></div>
 </header>
 
-<div class="marq"><p class="mq-l">Software yang menunjang proyek ini</p><div class="track" id="t1" aria-hidden="true"></div></div>
+<div class="marq"><p class="mq-l">Software yang menunjang proyek ini</p><div class="track" id="t1" role="img" aria-label="Logo software bergantian: ANSYS Fluent, AutoCAD, MATLAB, dan VS Code"></div></div>
 <div class="wv wv--navy"><svg class="wave wave--section" viewBox="0 0 1200 46" preserveAspectRatio="none"><path fill="#244A80" d="M0 24C100 4 200 4 300 24s200 20 300 0 200-20 300 0 200 20 300 0V46H0z"/></svg></div>
 
 <section class="blue" id="tentang"><div class="wrap">
   <h2>Tentang Project</h2>
-  <div class="org"><div class="side" id="abNav" role="tablist" aria-label="Topik tentang project"></div><div class="panel" id="abPanel"></div></div>
+  <p class="project-overview__intro">Tiga bahasan dalam satu alur. Pilih topik untuk melompat ke bagiannya.</p>
+  <div class="project-overview__grid">
+    <a class="project-overview__card project-overview__card--one" href="#prinsip-kerja"><span>01</span><h3>Prinsip kerja<br>turbin vortex</h3><b aria-hidden="true">↘</b></a>
+    <a class="project-overview__card project-overview__card--two" href="#mengapa-mikrohidro"><span>02</span><h3>Mengapa<br>mikrohidro?</h3><b aria-hidden="true">↘</b></a>
+    <a class="project-overview__card project-overview__card--three" href="#cara-kerja"><span>03</span><h3>Cara<br>kerjanya</h3><b aria-hidden="true">↘</b></a>
+  </div>
+  <article class="project-article">
+    <section class="project-topic project-topic--vortex" id="prinsip-kerja">
+      <div class="project-topic__copy"><p class="project-topic__eyebrow">TOPIK 01 <span>01 — 03</span></p><h3>Prinsip kerja<br>turbin vortex</h3><div class="project-topic__blank" aria-label="Ruang untuk isi bahasan"></div></div>
+      <div class="project-topic__art project-topic__art--vortex" aria-hidden="true">
+        <svg viewBox="0 0 360 360"><circle class="orbit orbit--one" cx="180" cy="180" r="137"/><circle class="orbit orbit--two" cx="180" cy="180" r="106"/><circle class="orbit orbit--three" cx="180" cy="180" r="75"/><path class="vortex-line" d="M37 145c34-43 87-56 130-32 48 27 38 87 1 98-30 9-52-19-40-40 9-16 31-13 34 3"/><circle class="vortex-core" cx="180" cy="180" r="19"/><path class="vortex-drop" d="M278 76c0 12-10 22-22 22s-22-10-22-22 22-37 22-37 22 25 22 37z"/></svg>
+        <span class="project-topic__art-index">V / 01</span>
+      </div>
+    </section>
+    <section class="project-topic project-topic--micro" id="mengapa-mikrohidro">
+      <div class="project-topic__art project-topic__art--micro" aria-hidden="true"><div class="micro-sun"></div><div class="micro-ring micro-ring--one"></div><div class="micro-ring micro-ring--two"></div><div class="micro-ring micro-ring--three"></div><span class="micro-dot micro-dot--one"></span><span class="micro-dot micro-dot--two"></span><span class="project-topic__art-index">H₂O / 02</span></div>
+      <div class="project-topic__copy"><p class="project-topic__eyebrow">TOPIK 02 <span>02 — 03</span></p><h3>Mengapa<br>mikrohidro?</h3><div class="project-topic__blank" aria-label="Ruang untuk isi bahasan"></div></div>
+    </section>
+    <section class="project-topic project-topic--flow" id="cara-kerja">
+      <div class="project-topic__copy"><p class="project-topic__eyebrow">TOPIK 03 <span>03 — 03</span></p><h3>Cara<br>kerjanya</h3><div class="project-topic__blank" aria-label="Ruang untuk isi bahasan"></div></div>
+      <div class="project-topic__art project-topic__art--flow" aria-hidden="true">
+        <div class="flow-node flow-node--water"><span class="flow-water"></span></div><i class="flow-link"></i><div class="flow-node flow-node--vortex"><span>↻</span></div><i class="flow-link"></i><div class="flow-node flow-node--power"><span>✳</span></div>
+        <span class="project-topic__art-index">FLOW / 03</span>
+      </div>
+    </section>
+  </article>
 </div></section>
 <div class="wv wv--blue"><svg class="wave wave--section" viewBox="0 0 1200 46" preserveAspectRatio="none"><path fill="#D6E8F1" d="M0 24C100 44 200 44 300 24s200-20 300 0 200 20 300 0 200-20 300 0V46H0z" transform="scale(1,-1) translate(0,-46)"/></svg></div>
 
