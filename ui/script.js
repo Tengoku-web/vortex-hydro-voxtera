@@ -5,10 +5,10 @@ const setMenuOpen=open=>{$('#ln').classList.toggle('open',open);bg.classList.tog
 bg.onclick=()=>setMenuOpen(!$('#ln').classList.contains('open'));
 $('#ln').onclick=e=>{if(e.target.closest('a'))setMenuOpen(false)};
 const tools=[
- {name:'ANSYS Fluent',image:'Image_Icon/Ansys.png'},
- {name:'AutoCAD',image:'Image_Icon/Autocad.png'},
- {name:'MATLAB',image:'Image_Icon/MathLab.png'},
- {name:'VS Code',image:'Image_Icon/Vscode.png'}
+ {name:'ANSYS Fluent',image:'assets/graphics/software-icons/Ansys.png'},
+ {name:'AutoCAD',image:'assets/graphics/software-icons/Autocad.png'},
+ {name:'MATLAB',image:'assets/graphics/software-icons/MathLab.png'},
+ {name:'VS Code',image:'assets/graphics/software-icons/Vscode.png'}
 ];
 const toolTrack=$('#t1');
 const toolSlides=tools.map(({name,image},i)=>'<span class="sw'+(i?'':' is-active')+'" aria-hidden="'+(i?'true':'false')+'"><img src="'+image+'" alt=""><span class="sw-label">'+name+'</span></span>').join('');
@@ -17,7 +17,7 @@ const toolCards=[...toolTrack.querySelectorAll('.sw')];
 let activeTool=0,toolRotation;
 const showTool=i=>{toolCards.forEach((card,index)=>{const active=index===i;card.classList.toggle('is-active',active);card.setAttribute('aria-hidden',String(!active))});activeTool=i};
 const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
-const updateToolRotation=()=>{clearInterval(toolRotation);if(!motionPreference.matches)toolRotation=setInterval(()=>showTool((activeTool+1)%toolCards.length),6000)};
+const updateToolRotation=()=>{clearInterval(toolRotation);if(!motionPreference.matches||document.documentElement.classList.contains('fm'))toolRotation=setInterval(()=>showTool((activeTool+1)%toolCards.length),6000)};
 updateToolRotation();
 motionPreference.addEventListener('change',updateToolRotation);
 function tabs(el,list,fn){el.innerHTML=list.map((t,i)=>'<button class="'+(i?'':'on')+'">'+t+'</button>').join('')+'<i class="ind"></i>';
@@ -48,17 +48,23 @@ const TEAM_PHOTO_FORMATS={
  'electrical/muhammad-farrel-caesar':'jpg',
  'electrical/mokhamad-rayhan-faturahman':'jpg'
 };
+const TEAM_GROUP_PHOTO_FORMATS={};
 const teamPhotoSlug=name=>name.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-const teamPhotoPath=(name,folder)=>'gambar_anggota/'+folder+'/'+teamPhotoSlug(name);
+const teamPhotoPath=(name,folder)=>'assets/graphics/team/'+folder+'/'+teamPhotoSlug(name);
 const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 /* ===== Struktur tim: coverflow 3D + flip card =====
-   Foto dicari lewat TEAM_PHOTO_FORMATS (lihat README). Warna aksen tiap kartu ada di TEAM_ACCENT. */
+   Foto anggota dan foto bersama didaftarkan lewat objek formatnya (lihat README). Warna aksen ada di TEAM_ACCENT. */
 const TEAM_ACCENT={pengurus:'#3C7BD9',modeling:'#2F9BC9','mat-model':'#5470DB',software:'#7C5CE0',electrical:'#EBA02F',mekanikal:'#1FB09C',perlengkapan:'#EA6A58',pdd:'#DC5A92'};
 const teamPhoto=(name,folder,kind)=>{
  const slug=teamPhotoSlug(name),format=TEAM_PHOTO_FORMATS[folder+'/'+slug];
  const hasPhoto=format==='jpg'||format==='png',isCard=kind==='card';
- const src=hasPhoto?teamPhotoPath(name,folder)+'.'+format:'gambar_anggota/'+(isCard?'placeholder-card.svg':'placeholder-avatar.svg');
+ const src=hasPhoto?teamPhotoPath(name,folder)+'.'+format:'assets/graphics/team/'+(isCard?'placeholder-card.svg':'placeholder-avatar.svg');
  return '<img class="'+(isCard?'tc__img':'tc__avatar')+'" src="'+src+'" alt="'+(isCard?'Foto '+escapeHtml(name):'')+'" decoding="async" draggable="false"'+(hasPhoto?' data-team-photo':'')+'>'
+};
+const teamGroupPhoto=(folder,division)=>{
+ const format=TEAM_GROUP_PHOTO_FORMATS[folder],hasPhoto=format==='jpg'||format==='png';
+ const src=hasPhoto?'assets/graphics/team/'+folder+'/foto-bersama.'+format:'assets/graphics/team/placeholder-card.svg';
+ return '<img class="tc__img" src="'+src+'" alt="Foto bersama Divisi '+escapeHtml(division)+'" decoding="async" draggable="false"'+(hasPhoto?' data-team-photo':'')+'>'
 };
 /* kalau foto gagal dimuat: coba placeholder dulu, kalau placeholder juga tidak ada, pakai siluet bawaan CSS */
 document.addEventListener('error',event=>{
@@ -66,7 +72,7 @@ document.addEventListener('error',event=>{
  if(!image.matches||!image.matches('.tc__img,.tc__avatar'))return;
  if(image.hasAttribute('data-team-photo')){
   image.removeAttribute('data-team-photo');
-  image.src='gambar_anggota/'+(image.classList.contains('tc__avatar')?'placeholder-avatar.svg':'placeholder-card.svg')
+  image.src='assets/graphics/team/'+(image.classList.contains('tc__avatar')?'placeholder-avatar.svg':'placeholder-card.svg')
  }else{
   image.classList.add('is-missing');
   image.removeAttribute('src')                                                  // hilangkan ikon gambar rusak
@@ -76,8 +82,8 @@ document.addEventListener('error',event=>{
 const TEAM_CARDS=[
  {key:'pengurus',folder:'pengurus',name:TEAM_MANAGEMENT[0].name,role:'Ketua Tim',backTitle:'Pengurus utama',desc:'',listLabel:'Sekretaris & bendahara',unit:'pengurus',
   people:TEAM_MANAGEMENT.slice(1).map(m=>({name:m.name,sub:m.position}))},
- ...TEAM_LEADERS.map(t=>({key:t.folder,folder:t.folder,name:t.leader,role:'Ketua Divisi '+t.division,backTitle:'Divisi '+t.division,desc:t.description,listLabel:'Anggota',unit:'anggota',
-  people:t.members.map(name=>({name}))}))
+ ...TEAM_LEADERS.map(t=>({key:t.folder,folder:t.folder,division:t.division,name:'Divisi '+t.division,role:'Foto bersama',backTitle:'Divisi '+t.division,desc:t.description,listLabel:'Ketua & anggota',unit:'orang',groupPhoto:true,
+  people:[{name:t.leader,sub:'Ketua Divisi '+t.division},...t.members.map(name=>({name}))]}))
 ];
 
 (function(){
@@ -92,7 +98,7 @@ const TEAM_CARDS=[
   const rows=c.people.map((p,k)=>'<li class="tc__row" style="--i:'+k+'">'+teamPhoto(p.name,c.folder,'member')+'<span><strong>'+escapeHtml(p.name)+'</strong>'+(p.sub?'<em>'+escapeHtml(p.sub)+'</em>':'')+'</span></li>').join('');
   return '<article class="tc" data-i="'+i+'" style="--ac:'+accent(c)+'"><div class="tc__inner">'
    +'<div class="tc__face tc__front"><button class="tc__open" type="button" tabindex="-1" aria-expanded="false" aria-label="'+escapeHtml(c.role)+': '+escapeHtml(c.name)+'. Tekan untuk melihat '+c.unit+'.">'
-    +teamPhoto(c.name,c.folder,'card')+'<span class="tc__shade"></span>'
+    +(c.groupPhoto?teamGroupPhoto(c.folder,c.division):teamPhoto(c.name,c.folder,'card'))+'<span class="tc__shade"></span>'
     +'<span class="tc__pill">'+ICON_USERS+c.people.length+' '+c.unit+'</span>'
     +'<span class="tc__cap"><strong>'+escapeHtml(c.name)+'</strong><span class="tc__role">'+escapeHtml(c.role)+'</span></span></button></div>'
    +'<div class="tc__face tc__back" inert><header class="tc__bh"><div><h4>'+escapeHtml(c.backTitle)+'</h4>'+(c.desc?'<p>'+escapeHtml(c.desc)+'</p>':'')+'</div>'
@@ -262,15 +268,22 @@ const TEAM_CARDS=[
  }
 })();
 const col={'3D CAD':'linear-gradient(135deg,#377A98,#140951)','Simulasi CFD':'radial-gradient(circle at 40% 50%,#FF4D5A,#FFB84D 24%,#22C7A9 55%,#140951)','Foto asli':'linear-gradient(160deg,#5FD39A,#0A3B3A)'};
-const items=[['3D CAD','Runner turbin, sudut isometrik'],['Simulasi CFD','Kontur kecepatan air di dalam bak'],['Foto asli','Alat saat uji coba'],['3D CAD','Tampak atas bak pusaran'],['Simulasi CFD','Streamline aliran masuk'],['Foto asli','Proses perakitan']];
+const items=[
+ ['3D CAD','Runner turbin','Model tiga dimensi runner turbin dari sudut isometrik','runner'],
+ ['Simulasi CFD','Kontur kecepatan','Visualisasi kontur kecepatan air di dalam bak','contour'],
+ ['Foto asli','Uji coba alat','Dokumentasi alat saat pengujian','trial'],
+ ['3D CAD','Bak pusaran','Tampak atas rancangan bak pusaran','plan'],
+ ['Simulasi CFD','Aliran air','Visualisasi streamline aliran masuk','streamline'],
+ ['Foto asli','Proses perakitan','Dokumentasi proses perakitan turbin','assembly']
+];
 let cur=[],ix=0;
 tabs($('#gt'),['Semua','3D CAD','Simulasi CFD','Foto asli'],f=>{cur=items.filter(i=>f==='Semua'||i[0]===f);
- $('#gd').innerHTML=cur.map((it,i)=>'<button class="pic" data-i="'+i+'" style="background:'+col[it[0]]+';animation-delay:'+i*60+'ms">'+it[0]+'</button>').join('')});
+ $('#gd').innerHTML=cur.map((it,i)=>'<button class="pic doc-card'+(f==='Semua'&&(i===0||i===5)?' doc-card--wide':'')+'" data-i="'+i+'" data-art="'+it[3]+'" aria-label="Buka '+it[1]+': '+it[2]+'" style="background:'+col[it[0]]+';animation-delay:'+i*60+'ms"><span class="doc-card__type">'+it[0]+'</span><span class="doc-card__title">'+it[1]+'</span><span class="doc-card__more" aria-hidden="true">+</span></button>').join('')});
 let lst=[];
 $('#gd').onclick=e=>{const b=e.target.closest('.pic');if(b)show(+b.dataset.i,cur)};
 function show(i,l){lst=l;ix=(i+lst.length)%lst.length;const it=lst[ix],p=$('#lp');
  if(it.img){p.className='pic im';p.style.background='#fff';p.innerHTML='<img src="'+it.img+'" alt="'+it.alt+'">';$('#lc').textContent=it.cap}
- else{p.className='pic';p.style.background=col[it[0]];p.textContent=it[0];$('#lc').textContent=it[1]}
+ else{p.className='pic';p.style.background=col[it[0]];p.textContent=it[0]+' · '+it[1];$('#lc').textContent=it[2]}
  $('#ct').textContent=(ix+1)+' / '+lst.length;$('#lb').classList.add('open')}
 const close=()=>$('#lb').classList.remove('open');
 $('#cl').onclick=close;$('#pv').onclick=()=>show(ix-1,lst);$('#nx').onclick=()=>show(ix+1,lst);
